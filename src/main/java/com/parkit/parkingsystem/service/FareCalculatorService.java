@@ -11,20 +11,22 @@ public class FareCalculatorService {
 
 		}
 
-		int inHour = ticket.getInTime().getHours();
-		int outHour = ticket.getOutTime().getHours();
+		long inHour = ticket.getInTime().getTime();
+		long outHour = ticket.getOutTime().getTime();
 
-		// TODO: Some tests are failing here. Need to check if this logic is correct
-		int duration = outHour - inHour;
+		// TODO: Some tests are failing here. Need to check if this logic is
+		// correct
+
+		long duration = outHour - inHour;
 
 		switch (ticket.getParkingSpot().getParkingType()) {
 		case CAR: {
-			ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+			ticket.setPrice(Fare.CAR_RATE_PER_HOUR * duration / (60 * 60 * 1000));
 			break;
 
 		}
 		case BIKE: {
-			ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
+			ticket.setPrice(Fare.BIKE_RATE_PER_HOUR * duration / (60 * 60 * 1000));
 			break;
 
 		}
