@@ -38,21 +38,25 @@ public class ParkingService {
 
 				Date inTime = new Date();
 				Ticket ticket = new Ticket();
-				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME,
+				// OUT_TIME)
 				// ticket.setId(ticketID);
 				ticket.setParkingSpot(parkingSpot);
 				ticket.setVehicleRegNumber(vehicleRegNumber);
 				ticket.setPrice(0);
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
-				ticketDAO.saveTicket(ticket); //Save the ticket in DB
+				ticketDAO.saveTicket(ticket); // Save the updated ticket in DB
 				System.out.println("Generated Ticket and saved in DB");
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+				System.out.println("Ticket :" + parkingSpot.isAvailable());
+
 			}
 
 		} catch (Exception e) {
 			logger.error("Unable to process incoming vehicle", e);
+
 		}
 	}
 
@@ -93,13 +97,16 @@ public class ParkingService {
 		switch (input) {
 		case 1: {
 			return ParkingType.CAR;
+
 		}
 		case 2: {
 			return ParkingType.BIKE;
+
 		}
 		default: {
 			System.out.println("Incorrect input provided");
 			throw new IllegalArgumentException("Entered input is invalid");
+
 		}
 
 		}
@@ -119,10 +126,12 @@ public class ParkingService {
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
 				System.out.println(
 						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+
 			} else {
 				System.out.println("Unable to update ticket information. Error occurred");
+
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 

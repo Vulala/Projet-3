@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.sql.Savepoint;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
@@ -56,23 +57,20 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test // TODO: check that a ticket is actually saved in DB and Parking table
-			// is
-			// updated with availability
+			// is updated with availability
+	
 	public void testParkingACar() {
 		// ARANGE
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		Ticket ticket = new Ticket();
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+		System.out.println("*** 1 *** :" + parkingSpot.isAvailable());
 
 		// ACT
-		parkingService.processIncomingVehicle();
-		//ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-		//ticket.setParkingSpot(parkingSpot);
-		//ticket.setVehicleRegNumber("ABCDEF");
-				System.out.println(ticketDAO);
+		parkingService.processIncomingVehicle(); // true -> false
+		System.out.println("*** 2 *** :" + parkingSpot.isAvailable());
+
 		// ASSERT
-		assertEquals(ticketDAO.getTicket(ticket.getVehicleRegNumber()), ticket); // Must be true?
-		assertEquals(parkingSpotDAO.updateParking(parkingSpot), true);
+		assertEquals(parkingSpot.isAvailable(), false);
 
 	}
 
@@ -82,20 +80,15 @@ public class ParkingDataBaseIT {
 		// ARRANGE
 		// testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		Ticket ticket = new Ticket();
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
 
 		// ACT
 		parkingService.processIncomingVehicle();
-		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-		ticket.setVehicleRegNumber("ABCDEF");
-		ticketDAO.saveTicket(ticket);
 		parkingService.processExitingVehicle();
 
 		// ASSERT
 		assertEquals(parkingSpotDAO.updateParking(parkingSpot), true); // Exiting
-	//	assertEquals(ticketDAO.updateTicket(any(Ticket.class)), 1.5);  // Fare
-	//	assertEquals(ticket.setOutTime(TicketDAO.class(getTimestamp(5))); // Time
+		// assertEquals(ticketDAO.updateTicket(any(Ticket.class)), 1.5); // Fare
 	}
 
 }
