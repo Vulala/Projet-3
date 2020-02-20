@@ -20,10 +20,10 @@ public class TicketDAO {
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
 	public boolean saveTicket(Ticket ticket) {
-		Connection connection = null;
+		Connection con = null;
 		try {
-			connection = dataBaseConfig.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(DBConstants.SAVE_TICKET);
+			con = dataBaseConfig.getConnection();
+			PreparedStatement preparedStatement = con.prepareStatement(DBConstants.SAVE_TICKET);
 			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			// ps.setInt(1,ticket.getId());
 			preparedStatement.setInt(1, ticket.getParkingSpot().getId());
@@ -38,18 +38,18 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 
 		} finally {
-			dataBaseConfig.closeConnection(connection);
+			dataBaseConfig.closeConnection(con);
 			return false;
 
 		}
 	}
 
 	public Ticket getTicket(String vehicleRegNumber) {
-		Connection connection = null;
+		Connection con = null;
 		Ticket ticket = null;
 		try {
-			connection = dataBaseConfig.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(DBConstants.GET_TICKET);
+			con = dataBaseConfig.getConnection();
+			PreparedStatement preparedStatement = con.prepareStatement(DBConstants.GET_TICKET);
 			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			preparedStatement.setString(1, vehicleRegNumber);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -72,17 +72,17 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 
 		} finally {
-			dataBaseConfig.closeConnection(connection);
+			dataBaseConfig.closeConnection(con);
 			return ticket;
 
 		}
 	}
 
 	public boolean updateTicket(Ticket ticket) {
-		Connection connection = null;
+		Connection con = null;
 		try {
-			connection = dataBaseConfig.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(DBConstants.UPDATE_TICKET);
+			con = dataBaseConfig.getConnection();
+			PreparedStatement preparedStatement = con.prepareStatement(DBConstants.UPDATE_TICKET);
 			preparedStatement.setDouble(1, ticket.getPrice());
 			preparedStatement.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
 			preparedStatement.setInt(3, ticket.getId());
@@ -93,7 +93,7 @@ public class TicketDAO {
 			logger.error("Error saving ticket info", ex);
 
 		} finally {
-			dataBaseConfig.closeConnection(connection);
+			dataBaseConfig.closeConnection(con);
 
 		}
 		return false;

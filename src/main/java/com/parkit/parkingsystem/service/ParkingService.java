@@ -50,7 +50,6 @@ public class ParkingService {
 				System.out.println("Generated Ticket and saved in DB");
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
-				System.out.println("Ticket :" + parkingSpot.isAvailable());
 
 			}
 
