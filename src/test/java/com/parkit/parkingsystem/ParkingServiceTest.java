@@ -45,7 +45,8 @@ public class ParkingServiceTest {
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
 			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-		 // when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
+			// Disabled
+			// when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(2);
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
@@ -62,7 +63,7 @@ public class ParkingServiceTest {
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
 
-	@Disabled 
+	@Disabled
 	@Test
 	public void processIncomingVehicleTest() {
 		parkingService.processIncomingVehicle();
