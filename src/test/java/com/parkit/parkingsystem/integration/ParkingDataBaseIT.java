@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
@@ -30,6 +29,8 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
+
+	// Integration Test used to test that tickets are well saved in the DataBase
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
@@ -74,7 +75,7 @@ public class ParkingDataBaseIT {
 		ResultSet resultSet = null;
 		String request = "SELECT AVAILABLE FROM parking";
 
-		// ACT// ASSERT
+		// ACT // ASSERT
 		parkingService.processIncomingVehicle(); // true -> false
 		con = dataBaseTestConfig.getConnection();
 		System.out.println("Connexion à la base de données");
@@ -117,9 +118,9 @@ public class ParkingDataBaseIT {
 
 	}
 
-	@Disabled
-	@Test // TODO: check that the fare generated AND the out time are populated
-			// correctly in the database
+// TODO: check that the fare generated AND the out time are populated correctly in the database
+	@Disabled("Work in progress")
+	@Test
 	public void testParkingLotExit() {
 		// ARRANGE
 		// testParkingACar();

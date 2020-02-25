@@ -22,6 +22,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
+	// Class used to test the ParkingService class
+
 	private static ParkingService parkingService;
 
 	@Mock
@@ -45,8 +47,7 @@ public class ParkingServiceTest {
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 
 			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-			// Disabled
-			// when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(2);
+// Disabled when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(2);
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
@@ -63,7 +64,7 @@ public class ParkingServiceTest {
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
 
-	@Disabled
+	@Disabled("Work in progress")
 	@Test
 	public void processIncomingVehicleTest() {
 		parkingService.processIncomingVehicle();

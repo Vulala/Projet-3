@@ -15,6 +15,9 @@ import java.sql.Timestamp;
 
 public class TicketDAO {
 
+	// Class used to communicate with the DataBase, to save tickets, get tickets
+	// and to update tickets
+
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();

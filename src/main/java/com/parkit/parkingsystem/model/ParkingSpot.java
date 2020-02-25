@@ -3,6 +3,8 @@ package com.parkit.parkingsystem.model;
 import com.parkit.parkingsystem.constants.ParkingType;
 
 public class ParkingSpot {
+	// Define the Parking spot informations and make them accessible with
+	// setters and getters
 	private int number;
 	private ParkingType parkingType;
 	private boolean isAvailable;

@@ -8,6 +8,10 @@ import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
+	// Beginning of the application, skeleton of the program.
+	// It initialize the application and ask the user to make choices about
+	// if he enter or leave the parking.
+
 	private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
 	public static void loadInterface() {
@@ -26,18 +30,23 @@ public class InteractiveShell {
 			switch (option) {
 			case 1: {
 				parkingService.processIncomingVehicle();
-				break;}
+				break;
+
+			}
 			case 2: {
 				parkingService.processExitingVehicle();
 				break;
+
 			}
 			case 3: {
 				System.out.println("Exiting from the system!");
 				continueApp = false;
 				break;
+
 			}
 			default:
 				System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
+
 			}
 
 		}

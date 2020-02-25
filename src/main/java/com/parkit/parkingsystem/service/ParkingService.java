@@ -12,7 +12,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.Date;
 
 public class ParkingService {
-
+	
+	/*
+	 * Class used to Write a ticket for every incoming vehicle with the method processIncomingVehicle()
+	 * This method also save the ticket in the DataBase.
+	 * Class used to get the next parking spot available with the method getNextParkingNumberIfAvailable()
+	 * Class used to get the vehicle type with the method getVehicleType()
+	 * This class also proceed to the exit of an user with the method processExitingVehicle()
+	 */
+	
 	private static final Logger logger = LogManager.getLogger("ParkingService");
 
 	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
@@ -35,12 +43,10 @@ public class ParkingService {
 				parkingSpot.setAvailable(false);
 				parkingSpotDAO.updateParking(parkingSpot);
 				// allot this parking space and mark it's availability as false
-
 				Date inTime = new Date();
 				Ticket ticket = new Ticket();
-				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME,
-				// OUT_TIME)
-				// ticket.setId(ticketID);
+				// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE,
+				// IN_TIME, OUT_TIME,
 				ticket.setParkingSpot(parkingSpot);
 				ticket.setVehicleRegNumber(vehicleRegNumber);
 				ticket.setPrice(0);
@@ -117,10 +123,12 @@ public class ParkingService {
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
+			// Set the outTime and then call the FareCalculatorService class
+			// to calculate the price
 			fareCalculatorService.calculateFare(ticket, ticket.getVehicleRegNumber());
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
-				parkingSpot.setAvailable(true);
+				parkingSpot.setAvailable(true); // Set the spot as available
 				parkingSpotDAO.updateParking(parkingSpot);
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
 				System.out.println(

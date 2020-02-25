@@ -27,6 +27,9 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 @ExtendWith(MockitoExtension.class)
 public class FivePercentsDiscountForRecurentUsersTest {
 
+	// Class used to test the 5% discount feature. It test for car and
+	// for bike
+
 	private static ParkingService parkingService;
 	private static FareCalculatorService fareCalculatorService;
 
@@ -44,6 +47,10 @@ public class FivePercentsDiscountForRecurentUsersTest {
 
 	@BeforeEach
 	private void SetUpCarTest() {
+
+		// BeforeEach used to put a record in the DB before the test. To test
+		// the current user. Might be pointless for a Unit Test(?)
+
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
@@ -84,7 +91,6 @@ public class FivePercentsDiscountForRecurentUsersTest {
 
 	@Test
 	public void FivePercentsDiscountForRecurentUsersBikeTest() {
-
 		Ticket ticket = new Ticket();
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 		Date outTime = new Date();

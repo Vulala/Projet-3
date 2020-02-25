@@ -6,24 +6,27 @@ import java.sql.Connection;
 
 public class DataBasePrepareService {
 
+	// Class used to clear the entries of the DataBase
+	// Setting parking spot to available and clearing tickets.
+
 	DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 
 	public void clearDataBaseEntries() {
-		Connection connection = null;
+		Connection con = null;
 		try {
-			connection = dataBaseTestConfig.getConnection();
+			con = dataBaseTestConfig.getConnection();
 
 			// set parking entries to available
-			connection.prepareStatement("update parking set available = true").execute();
+			con.prepareStatement("update parking set available = true").execute();
 
 			// clear ticket entries;
-			connection.prepareStatement("truncate table ticket").execute();
+			con.prepareStatement("truncate table ticket").execute();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
-			dataBaseTestConfig.closeConnection(connection);
+			dataBaseTestConfig.closeConnection(con);
 
 		}
 	}

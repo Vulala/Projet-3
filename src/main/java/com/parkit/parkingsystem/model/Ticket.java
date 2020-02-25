@@ -3,6 +3,8 @@ package com.parkit.parkingsystem.model;
 import java.util.Date;
 
 public class Ticket {
+	// Define the information that gather a Ticket
+	// Making them accessible with setters and getters
 	private int id;
 	private ParkingSpot parkingSpot;
 	private String vehicleRegNumber;

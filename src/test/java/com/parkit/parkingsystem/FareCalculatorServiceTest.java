@@ -15,6 +15,8 @@ import java.util.Date;
 
 public class FareCalculatorServiceTest {
 
+	// Class used to test the FareCalculatorService class
+
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
 
@@ -30,6 +32,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareCar() {
+		// 60 minutes +
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
 		Date outTime = new Date();
@@ -44,6 +47,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareBike() {
+		// 60 minutes +
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
 		Date outTime = new Date();
@@ -58,6 +62,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareUnknownType() {
+		// Wrong vehicle input
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
 		Date outTime = new Date();
@@ -72,6 +77,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareBikeWithFutureInTime() {
+		// Error with future time as result
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
 		Date outTime = new Date();
@@ -86,6 +92,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareCarWithFutureInTime() {
+		// Error with future time as result
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
 		Date outTime = new Date();
@@ -100,6 +107,8 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareBikeWithLessThanOneHourParkingTime() {
+		// Less than one hour in the parking give less than the price for one
+		// hour, proportional.
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (45 * 60 * 1000));
 		// 45 minutes parking time should give 3/4th parking fare
@@ -116,6 +125,8 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareCarWithLessThanOneHourParkingTime() {
+		// Less than one hour in the parking give less than the price for one
+		// hour, proportional.
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (45 * 60 * 1000));
 		// 45 minutes parking time should give 3/4th parking fare
@@ -131,6 +142,8 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareCarWithMoreThanADayParkingTime() {
+		// More than one day in the parking give a proportional increase of the
+		// price.
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (24 * 60 * 60 * 1000));
 		// 24 hours parking time should give 24*parking fare per hour
@@ -146,6 +159,8 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareBikeWithMoreThanADayParkingTime() {
+		// More than one day in the parking give a proportional increase of the
+		// price.
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (24 * 60 * 60 * 1000));
 		// 24 hours parking time should give 24*parking fare per hour

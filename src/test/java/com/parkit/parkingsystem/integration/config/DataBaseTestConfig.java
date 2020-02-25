@@ -8,6 +8,9 @@ import java.sql.*;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
+	// Class used to log to the DataBaseTest, to make the different tests use a
+	// DataBase used only for testing purpose.
+
 	private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -24,7 +27,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
 
 			} catch (SQLException e) {
 				logger.error("Error while closing connection", e);
+
 			}
+
 		}
 	}
 
@@ -36,7 +41,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
 
 			} catch (SQLException e) {
 				logger.error("Error while closing prepared statement", e);
+
 			}
+
 		}
 	}
 
@@ -48,7 +55,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
 
 			} catch (SQLException e) {
 				logger.error("Error while closing result set", e);
+
 			}
+
 		}
 	}
 }
