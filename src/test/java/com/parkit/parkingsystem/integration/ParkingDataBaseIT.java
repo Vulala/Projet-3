@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -64,6 +65,7 @@ public class ParkingDataBaseIT {
 	// TODO: check that a ticket is actually saved in DB and Parking table
 	// is updated with availability
 
+	@Disabled("Work in progress")
 	@Test
 	public void testParkingACar() throws ClassNotFoundException, SQLException {
 		// ARANGE
@@ -119,21 +121,45 @@ public class ParkingDataBaseIT {
 	}
 
 // TODO: check that the fare generated AND the out time are populated correctly in the database
-	@Disabled("Work in progress")
+	// @Disabled("Work in progress")
 	@Test
-	public void testParkingLotExit() {
+	public void testParkingLotExit() throws InterruptedException {
 		// ARRANGE
 		// testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-
+	/*
+		Date outHour = new Date();
+		outHour.setTime(System.currentTimeMillis() - (58 * 1000));
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(outHour);
+		calendar.add(Calendar.SECOND, 1);
+		outHour = calendar.getTime();
+	 */
+		
 		// ACT
 		parkingService.processIncomingVehicle();
+		TimeUnit.SECONDS.sleep(1);
 		parkingService.processExitingVehicle();
 
 		// ASSERT
-		assertEquals(parkingSpotDAO.updateParking(parkingSpot), true); // Exiting
-		// assertEquals(ticketDAO.updateTicket(any(Ticket.class)), 1.5); // Fare
+		assertEquals(parkingSpotDAO.updateParking(parkingSpot), true);
+		// Check if the method fail (false) or not
+
+		assertEquals(ticketDAO.getTicket("ABCDEF").getId(), parkingSpot.getId());
+		// Compare the ID saved in the DB to the one set in the test
+
+		assertEquals(ticketDAO.getTicket("ABCDEF").getParkingSpot().getParkingType(), parkingSpot.getParkingType());
+		// Compare the ParkingType saved in the DB to the one set in the test
+
+		assertEquals(ticketDAO.getTicket("ABCDEF").getParkingSpot().isAvailable(), false);
+		// Check that the availability saved in DB is the same as the one set in the test
+
+		assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(), 0);
+		// Check that the price of the Ticket is equal to 0 (30 minutes feature)
+
+	//	assertEquals(ticketDAO.getTicket("ABCDEF").getOutTime(), outHour);
+		// Check that the OutTime is well save in the DB
 	}
 
 }

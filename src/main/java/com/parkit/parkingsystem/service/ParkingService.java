@@ -129,7 +129,7 @@ public class ParkingService {
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true); // Set the spot as available
-				parkingSpotDAO.updateParking(parkingSpot);
+				parkingSpotDAO.updateParking(parkingSpot); // update the availability for that parking slot in the DB
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
 				System.out.println(
 						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
