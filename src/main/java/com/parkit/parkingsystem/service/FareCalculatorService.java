@@ -6,11 +6,12 @@ import com.parkit.parkingsystem.model.Ticket;
 public class FareCalculatorService {
 
 	/*
-	 * FareCalculatorService is the class that will calculate the price that
-	 * the user have to pay when he leave the parking.
-	 * The two features requested have been added: 
-	 * One allow the user to not pay anything when he park for less than 30 minutes . (It is not 30 first free minutes)
-	 * The second features reduce the price by 5% if the user is a recurrent user. (if he already been there before.)
+	 * FareCalculatorService is the class that will calculate the price that the
+	 * user have to pay when he leave the parking. The two features requested
+	 * have been added: One allow the user to not pay anything when he park for
+	 * less than 30 minutes . (It is not 30 first free minutes) The second
+	 * features reduce the price by 5% if the user is a recurrent user. (if he
+	 * already been there before.)
 	 */
 
 	public void calculateFare(Ticket ticket, String vehicleRegNumber) {
@@ -24,7 +25,8 @@ public class FareCalculatorService {
 
 			long duration = (outHour - inHour) / (60 * 1000);
 			if (duration > 30 && vehicleRegNumber != null) {
-				System.out.println("You already came here, here a free 5%");
+				System.out.println(
+						"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
 				System.out.println("Your vehicle have been parked for " + duration + " minutes.");
 				switch (ticket.getParkingSpot().getParkingType()) {
 				case CAR: {

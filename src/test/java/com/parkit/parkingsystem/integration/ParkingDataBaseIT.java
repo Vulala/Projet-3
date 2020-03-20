@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -62,23 +61,20 @@ public class ParkingDataBaseIT {
 
 	}
 
-	// TODO: check that a ticket is actually saved in DB and Parking table
-	// is updated with availability
+// TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
 
-	@Disabled("Work in progress")
+	// @Disabled("Work in progress")
 	@Test
 	public void testParkingACar() throws ClassNotFoundException, SQLException {
+
 		// ARANGE
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		// ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-		// System.out.println("*** 1 *** :" + parkingSpot.isAvailable());
-
 		Connection con = null;
 		ResultSet resultSet = null;
 		String request = "SELECT AVAILABLE FROM parking";
 
-		// ACT // ASSERT
-		parkingService.processIncomingVehicle(); // true -> false
+		// ACT
+		parkingService.processIncomingVehicle(); // availability: true -> false
 		con = dataBaseTestConfig.getConnection();
 		System.out.println("Connexion à la base de données");
 
@@ -92,26 +88,26 @@ public class ParkingDataBaseIT {
 
 		}
 
+		// ASSERT
 		System.out.println("Parcours des données retournées par la requête");
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
 			int numberColumn = rsmd.getColumnCount();
-			boolean again = resultSet.next();
-			while (again) {
+			while (resultSet.next()) {
 				for (int i = 1; i <= numberColumn; i++) {
-					System.out.print(resultSet.getInt(i));
+					assertEquals("0", resultSet.getString("AVAILABLE"));
+					System.out.println(resultSet.getString("AVAILABLE"));
 
 				}
-				while (again) {
-					for (int i = 1; i <= numberColumn; i++)
-						assertEquals("0", resultSet.getString("AVAILABLE"));
-					again = resultSet.next();
+				while (resultSet.next()) {
+					for (int i = 1; i <= numberColumn; i++);
+					System.out.print(resultSet.getString("AVAILABLE"));
 
 					// expected 0 but was 1 -> expected 1 but was 0...
 				}
-				resultSet.close();
 
 			}
+			resultSet.close();
 
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -121,6 +117,7 @@ public class ParkingDataBaseIT {
 	}
 
 // TODO: check that the fare generated AND the out time are populated correctly in the database
+
 	// @Disabled("Work in progress")
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
@@ -128,15 +125,14 @@ public class ParkingDataBaseIT {
 		// testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-	/*
-		Date outHour = new Date();
-		outHour.setTime(System.currentTimeMillis() - (58 * 1000));
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(outHour);
-		calendar.add(Calendar.SECOND, 1);
-		outHour = calendar.getTime();
-	 */
-		
+
+		/*
+		 * Date outHour = new Date(); outHour.setTime(System.currentTimeMillis()
+		 * - (58 * 1000)); Calendar calendar = Calendar.getInstance();
+		 * calendar.setTime(outHour); calendar.add(Calendar.SECOND, 1); outHour
+		 * = calendar.getTime();
+		 */
+
 		// ACT
 		parkingService.processIncomingVehicle();
 		TimeUnit.SECONDS.sleep(1);
@@ -153,12 +149,13 @@ public class ParkingDataBaseIT {
 		// Compare the ParkingType saved in the DB to the one set in the test
 
 		assertEquals(ticketDAO.getTicket("ABCDEF").getParkingSpot().isAvailable(), false);
-		// Check that the availability saved in DB is the same as the one set in the test
+		// Check that the availability saved in DB is the same as the one set in
+		// the test
 
 		assertEquals(ticketDAO.getTicket("ABCDEF").getPrice(), 0);
 		// Check that the price of the Ticket is equal to 0 (30 minutes feature)
 
-	//	assertEquals(ticketDAO.getTicket("ABCDEF").getOutTime(), outHour);
+		// assertEquals(ticketDAO.getTicket("ABCDEF").getOutTime(), outHour);
 		// Check that the OutTime is well save in the DB
 	}
 

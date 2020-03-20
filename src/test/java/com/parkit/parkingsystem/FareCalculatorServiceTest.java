@@ -174,4 +174,30 @@ public class FareCalculatorServiceTest {
 		assertEquals((24 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
 	}
 
+	@Test
+	public void nullParkingType() {
+		// Error when a null vehicle type is set as input
+		ParkingType vehicle = null;
+		ParkingSpot parkingSpot = new ParkingSpot(1, vehicle, false);
+
+		ticket.setParkingSpot(parkingSpot);
+		assertThrows(NullPointerException.class,
+				() -> fareCalculatorService.calculateFare(ticket, ticket.getVehicleRegNumber()));
+	}
+
+	@Test
+	public void outTimeProvidedIncorect() {
+		// Error when the outTime is not correct
+		Date inTime = new Date();
+		inTime.setTime(System.currentTimeMillis() - (60 * 1000));
+		Date outTime = new Date();
+		outTime.setTime(0);
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+		assertThrows(IllegalArgumentException.class,
+				() -> fareCalculatorService.calculateFare(ticket, ticket.getVehicleRegNumber()));
+	}
 }
