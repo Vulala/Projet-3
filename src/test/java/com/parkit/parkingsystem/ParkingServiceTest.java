@@ -1,7 +1,9 @@
 package com.parkit.parkingsystem;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,23 +40,17 @@ public class ParkingServiceTest {
 	private static TicketDAO ticketDAO;
 
 	@BeforeEach
-	private void setUpPerTest() {
-		try {
-			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+	private void setUpPerTest() throws Exception {
+		lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
-			ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-			ticket = new Ticket();
-			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-			ticket.setParkingSpot(parkingSpot);
-			ticket.setVehicleRegNumber("ABCDEF");
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+		ticket = new Ticket();
+		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+		ticket.setParkingSpot(parkingSpot);
+		ticket.setVehicleRegNumber("ABCDEF");
 
-			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to set up test mock objects");
-
-		}
 	}
 
 	@Test
@@ -67,7 +63,24 @@ public class ParkingServiceTest {
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
 
-// @Disabled("Work in progress")
+	@Test
+	public void processExitingVehicleElseTest() {
+		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+
+		parkingService.processExitingVehicle();
+		assertEquals("Unable to update ticket information. Error occurred",
+				"Unable to update ticket information. Error occurred");
+	}
+
+	@Test
+	public void processExitingVehicleExceptionTest() {
+		when(ticketDAO.getTicket(anyString())).thenReturn(null);
+
+		parkingService.processExitingVehicle();
+		assertEquals("Unable to process exiting vehicle", "Unable to process exiting vehicle");
+	}
+
 	@Test
 	public void processIncomingVehicleCarTest() {
 		when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -86,4 +99,20 @@ public class ParkingServiceTest {
 		verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
 	}
 
+	@Test
+	public void getNextParkingNumberIfAvailableIllegalArgumentExceptionTest() {
+		when(inputReaderUtil.readSelection()).thenReturn(10);
+
+		parkingService.processIncomingVehicle();
+		assertEquals("Error parsing user input for type of vehicle", "Error parsing user input for type of vehicle");
+	}
+
+	@Test
+	public void getNextParkingNumberIfAvailableElseExceptionTest() {
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(parkingSpotDAO.getNextAvailableSlot((ParkingType.CAR))).thenReturn(0);
+
+		parkingService.processIncomingVehicle();
+		assertEquals("Error fetching next available parking slot", "Error fetching next available parking slot");
+	}
 }

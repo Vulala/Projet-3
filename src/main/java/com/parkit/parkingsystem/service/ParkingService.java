@@ -12,15 +12,16 @@ import org.apache.logging.log4j.Logger;
 import java.util.Date;
 
 public class ParkingService {
-	
+
 	/*
-	 * Class used to Write a ticket for every incoming vehicle with the method processIncomingVehicle()
-	 * This method also save the ticket in the DataBase.
-	 * Class used to get the next parking spot available with the method getNextParkingNumberIfAvailable()
-	 * Class used to get the vehicle type with the method getVehicleType()
-	 * This class also proceed to the exit of an user with the method processExitingVehicle()
+	 * Class used to Write a ticket for every incoming vehicle with the method
+	 * processIncomingVehicle() This method also save the ticket in the
+	 * DataBase. Class used to get the next parking spot available with the
+	 * method getNextParkingNumberIfAvailable() Class used to get the vehicle
+	 * type with the method getVehicleType() This class also proceed to the exit
+	 * of an user with the method processExitingVehicle()
 	 */
-	
+
 	private static final Logger logger = LogManager.getLogger("ParkingService");
 
 	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
@@ -80,7 +81,9 @@ public class ParkingService {
 				parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
 
 			} else {
-				throw new Exception("Error fetching parking number from DB. Parking slots might be full");
+				System.out.println(
+						"***The parking for your type of vehicle is actually full. Sorry for the inconvenience.***");
+				throw new Exception("Error fetching parking number from DB. Parking slots are full");
 
 			}
 
@@ -129,7 +132,8 @@ public class ParkingService {
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true); // Set the spot as available
-				parkingSpotDAO.updateParking(parkingSpot); // update the availability for that parking slot in the DB
+				parkingSpotDAO.updateParking(parkingSpot);
+				// update the availability for that parking slot in the DB
 				System.out.println("Please pay the parking fare:" + ticket.getPrice());
 				System.out.println(
 						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
