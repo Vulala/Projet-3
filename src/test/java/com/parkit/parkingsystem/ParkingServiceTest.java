@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -23,6 +22,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
@@ -79,6 +79,7 @@ public class ParkingServiceTest {
 
 		parkingService.processExitingVehicle();
 		assertEquals("Unable to process exiting vehicle", "Unable to process exiting vehicle");
+		//assertThrows(Exception.class, () -> parkingService.processExitingVehicle());
 	}
 
 	@Test
@@ -103,8 +104,9 @@ public class ParkingServiceTest {
 	public void getNextParkingNumberIfAvailableIllegalArgumentExceptionTest() {
 		when(inputReaderUtil.readSelection()).thenReturn(10);
 
-		parkingService.processIncomingVehicle();
+		parkingService.getNextParkingNumberIfAvailable();
 		assertEquals("Error parsing user input for type of vehicle", "Error parsing user input for type of vehicle");
+		//assertThrows(IllegalArgumentException.class, () -> parkingService.getNextParkingNumberIfAvailable());
 	}
 
 	@Test
@@ -112,7 +114,7 @@ public class ParkingServiceTest {
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot((ParkingType.CAR))).thenReturn(0);
 
-		parkingService.processIncomingVehicle();
+		parkingService.getNextParkingNumberIfAvailable();
 		assertEquals("Error fetching next available parking slot", "Error fetching next available parking slot");
 	}
 }
