@@ -94,8 +94,12 @@
 		<dependency> <!-- mvn verify -->
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-failsafe-plugin</artifactId>
-			<version>2.22.2</version>
-			<scope>test</scope>
+			<version>3.0.0-M4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-site-plugin</artifactId>
+			<version>3.9.0</version>
 		</dependency>
 
 		<!-- FasterXML -->
@@ -154,7 +158,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.21.0</version>
+				<version>3.0.0-M4</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.junit.platform</groupId>
@@ -188,7 +192,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.0.0-M4</version>
 				<executions>
 					<execution>
 						<goals>

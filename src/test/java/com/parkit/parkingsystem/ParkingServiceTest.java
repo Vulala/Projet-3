@@ -54,7 +54,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleTest() {
+	public void GivenAVehicleLeavingTheParking_WhenProcessExitingVehicle_ThenTheDBIsUpdated() {
 		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 		when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
@@ -64,7 +64,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleElseTest() {
+	public void GivenLeavingTheParkingWithFalseTicket_WhenProcessExitingVehicle_ThenReturnError() {
 		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
@@ -74,16 +74,15 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleExceptionTest() {
+	public void GivenLeavingTheParkingWithNullTicket_WhenProcessExitingVehicle_ThenReturnNullPointerException() {
 		when(ticketDAO.getTicket(anyString())).thenReturn(null);
 
 		parkingService.processExitingVehicle();
 		assertEquals("Unable to process exiting vehicle", "Unable to process exiting vehicle");
-		//assertThrows(Exception.class, () -> parkingService.processExitingVehicle());
 	}
 
 	@Test
-	public void processIncomingVehicleCarTest() {
+	public void GivenACarCommingToPark_WhenProcessIncomingVehicle_ThenItCallParkingSpotDAO() {
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot((ParkingType.CAR))).thenReturn(1);
 
@@ -92,7 +91,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processIncomingVehicleBikeTest() {
+	public void GivenABikeCommingToPark_WhenProcessIncomingVehicle_ThenItCallParkingSpotDAO() {
 		when(inputReaderUtil.readSelection()).thenReturn(2);
 		when(parkingSpotDAO.getNextAvailableSlot((ParkingType.BIKE))).thenReturn(1);
 
@@ -101,16 +100,17 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void getNextParkingNumberIfAvailableIllegalArgumentExceptionTest() {
+	public void GivenAWrongSelectioInput_WhenGetNextParkingNumberIfAvailable_ThenReturnAnIllegalArgumentException() {
 		when(inputReaderUtil.readSelection()).thenReturn(10);
 
 		parkingService.getNextParkingNumberIfAvailable();
 		assertEquals("Error parsing user input for type of vehicle", "Error parsing user input for type of vehicle");
-		//assertThrows(IllegalArgumentException.class, () -> parkingService.getNextParkingNumberIfAvailable());
+		// assertThrows(IllegalArgumentException.class, () ->
+		// parkingService.getNextParkingNumberIfAvailable());
 	}
 
 	@Test
-	public void getNextParkingNumberIfAvailableElseExceptionTest() {
+	public void GivenAWrongAvailableSlot_WhenGetNextParkingNumberIfAvailable_ThenReturnAnIllegalArgumentException() {
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot((ParkingType.CAR))).thenReturn(0);
 

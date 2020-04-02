@@ -16,8 +16,7 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 
 public class FareCalculatorServiceFree30minsTest {
 
-	// Class used to test the 30 minutes free fare when parked for 30 minutes or
-	// less.
+// Test the 30 minutes free fare when the user is parked for 30 minutes or less.
 
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
@@ -33,7 +32,7 @@ public class FareCalculatorServiceFree30minsTest {
 	}
 
 	@Test
-	public void FreeParkingUnder30minsCar() {
+	public void GivenACarParkedFor30MinutesOrLess_WhenCalculateFare_ThenThePriceShouldBe0() {
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (30 * 60 * 1000));
 		// 30 minutes or less parking time should give free parking fare
@@ -49,7 +48,7 @@ public class FareCalculatorServiceFree30minsTest {
 	}
 
 	@Test
-	public void FreeParkingUnder30minsBike() {
+	public void GivenABikeParkedFor30MinutesOrLess_WhenCalculateFare_ThenThePriceShouldBe0() {
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (30 * 60 * 1000));
 		// 30 minutes or less parking time should give free parking fare
