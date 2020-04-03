@@ -12,8 +12,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<dep.junit.version>5.6.0</dep.junit.version>
-		<dep.log4j.version>2.12.1</dep.log4j.version>
+		<dep.junit.version>5.6.1</dep.junit.version>
+		<dep.log4j.version>2.13.1</dep.log4j.version>
 	</properties>
 
 	<!-- Log4j - MySQL - JUnit - Mockito - JaCoCo - FasterXML -->
@@ -52,12 +52,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.6.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
 			<version>${dep.junit.version}</version>
@@ -81,25 +75,29 @@
 		</dependency>
 
 		<!-- Maven -->
-		<dependency> <!-- mvn test -->
+		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-assembly-plugin</artifactId>
 			<version>3.2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<version>3.2.0</version>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>build-helper-maven-plugin</artifactId>
+			<version>3.1.0</version>
 		</dependency>
-		<dependency> <!-- mvn verify -->
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-failsafe-plugin</artifactId>
-			<version>3.0.0-M4</version>
+
+		<!-- SpotBugs -->
+		<dependency>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-maven-plugin</artifactId>
+			<version>4.0.0</version>
 		</dependency>
+
+		<!-- Checkstyle -->
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-site-plugin</artifactId>
-			<version>3.9.0</version>
+			<artifactId>maven-checkstyle-plugin</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 
 		<!-- FasterXML -->
@@ -124,22 +122,8 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-						</configuration>
-					</execution>
-				</executions>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.9.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -148,57 +132,33 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>parkit.parkingsystem.App.java</mainClass>
+							<mainClass>com.parkit.parkingsystem.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M4</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>1.2.0</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<excludes>
-						<exclude>**/*IT.java</exclude>
-					</excludes>
-				</configuration>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
-						<id>integration-test</id>
+						<phase>package</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>single</goal>
 						</goals>
-						<phase>integration-test</phase>
 						<configuration>
-							<excludes>
-								<exclude>none</exclude>
-							</excludes>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
+							<archive>
+								<manifest>
+									<mainClass>
+										com.parkit.parkingsystem.App
+									</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M4</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -219,26 +179,65 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin> <!-- Unit Test -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<executions>
 					<execution>
-						<id>pre-integration-test</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>prepare-agent-integration</goal>
-						</goals>
 						<configuration>
-							<destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin> <!-- Integration Test -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+				<executions>
 					<execution>
 						<id>integration-test</id>
-						<phase>integration-test</phase>
 						<goals>
-							<goal>report-integration</goal>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*Test.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.0.0</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
