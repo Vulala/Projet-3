@@ -1,7 +1,9 @@
 package com.parkit.parkingsystem.constants;
 
 public class Fare {
-	// Class used to set the price per hour of each vehicle
-	public static final double BIKE_RATE_PER_HOUR = 1.0;
-	public static final double CAR_RATE_PER_HOUR = 1.5;
+    
+    // Set the price per hour of a ticket for each vehicle
+    
+    public static final double BIKE_RATE_PER_HOUR = 1.0;
+    public static final double CAR_RATE_PER_HOUR = 1.5;
 }
