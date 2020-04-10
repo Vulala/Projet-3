@@ -50,9 +50,6 @@ public class FareCalculatorService {
         long inHour = ticket.getInTime().getTime();
         long outHour = ticket.getOutTime().getTime();
         
-// TODO: Some tests are failing here. Need to check if this logic is correct
-//-> change int getHour() to long getTime().
-        
         long duration = (outHour - inHour) / (60 * 1000);
         
         if (duration <= 30) {

@@ -64,8 +64,6 @@ public class ParkingDataBaseIT {
         
     }
     
-// TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
-    
     @Test
     public void GivenAnUserComingInTheParking_WhenProcessIncomingVehicle_ThenItSaveATicketInTheDBAndTheAvailabilityIsWellSet()
             throws ClassNotFoundException, SQLException {
@@ -118,8 +116,6 @@ public class ParkingDataBaseIT {
         }
         
     }
-    
-// TODO: check that the fare generated and the out time are populated correctly in the database
     
     @DisplayName("The ID is saved in the DB, Car case")
     @Test
